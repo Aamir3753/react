@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import { DISHES } from '../shared';
 import DishDetail from './DishDetailComponent';
-import { Navbar, NavbarBrand } from 'reactstrap';
+import Header from './HeaderComponent'
+import Footer from './FooterComponent';
 
 class Main extends Component {
     constructor(props) {
@@ -19,18 +20,15 @@ class Main extends Component {
     }
     render() {
         return (
-            <div>
-                <Navbar dark color="dark">
-                    <div className="container">
-                        <NavbarBrand href="/">Restaurant</NavbarBrand>
-                    </div>
-                </Navbar>
+            <React.Fragment>
+                <Header />
                 <div className="container">
                     <Menu dishes={this.state.dishes} onClick={(dishId) => this.selectDish(dishId)} />
-                    <DishDetail dish={this.state.dishes.filter(dish => dish.id === this.state.selectedDish)[0]}/>
+                    <DishDetail dish={this.state.dishes.filter(dish => dish.id === this.state.selectedDish)[0]} />
                 </div>
-            </div>
-                )
-            }
-        }
+                <Footer />
+            </React.Fragment>
+        )
+    }
+}
 export default Main;
