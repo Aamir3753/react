@@ -10,6 +10,7 @@ import Header from './HeaderComponent'
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
+import About from './AboutComponent';
 
 class Main extends Component {
     constructor(props) {
@@ -45,6 +46,7 @@ class Main extends Component {
                     <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} />
                     <Route path="/menu/:dishId" component={DishWithId} />
                     <Route exact path="/contactus" component={Contact} />
+                    <Route path="/aboutus"  component={() => <About leaders={this.state.leaders} />} />
                     <Redirect to="/home" />
                 </Switch>
                 <Footer />
@@ -53,10 +55,3 @@ class Main extends Component {
     }
 }
 export default Main;
-{/* <Menu dishes={this.state.dishes} onClick={(dishId) => this.selectDish(dishId)} />
-        <DishDetail dish={this.state.dishes.filter(dish => dish.id === this.state.selectedDish)[0]} /> */}
-                                    // selectDish(dishId) {
-                                    //     this.setState({
-                                    //         selectedDish: dishId
-                                    //     })
-                                    // }
