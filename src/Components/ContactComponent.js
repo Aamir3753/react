@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FormGroup, Form, Input, Col, Breadcrumb, BreadcrumbItem, Button, Label } from 'reactstrap';
+import { FormGroup, Form, Input, Col, Breadcrumb, BreadcrumbItem, Button, Label, FormFeedback } from 'reactstrap';
+
 class Contact extends React.Component {
     constructor(props) {
         super(props);
@@ -11,7 +12,13 @@ class Contact extends React.Component {
             email: '',
             agree: false,
             contactType: 'Tel',
-            message: ''
+            message: '',
+            toched: {
+                firstname: false,
+                lastname: false,
+                telnum: false,
+                email: false
+            }
         }
     }
     handleInputChange = (event) => {
@@ -23,14 +30,44 @@ class Contact extends React.Component {
                 [name]: value
             }
         )
-
+    }
+    handleBlur = (feild) => () => {
+        this.setState({ toched: { ...this.state.toched, [feild]: true } });
+    }
+    validate = (firstname, lastname, telnum, email) => {
+        const errors = {
+            firstname: '',
+            lastname: '',
+            telnum: '',
+            email: ''
+        }
+        if (this.state.toched.firstname && firstname.length < 3) {
+            errors.firstname = "First name should be >= 3 characters";
+        }
+        else if (this.state.toched.firstname && firstname.length > 10) {
+            errors.firstname = "First name should be <=10 characters";
+        }
+        if (this.state.toched.lastname && lastname.length < 3) {
+            errors.lastname = "Last name should be >= 3 characters";
+        }
+        else if (this.state.toched.lastname && lastname.length > 10) {
+            errors.lastname = "Last name should be <=10 characters";
+        }
+        const reg = /^\d+$/;
+        if (this.state.toched.telnum && !reg.test(telnum)) {
+            errors.telnum = "Tel. number should contain only numbers";
+        }
+        if (this.state.toched.email && email.split("").filter(x => x === "@").length !== 1) {
+            errors.email = "Email should container only a @";
+        }
+        return errors;
     }
     handleSubmit = (event) => {
         event.preventDefault();
         console.log(JSON.stringify(this.state));
     }
-
     render() {
+        const errors = this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email);
         return (
             <div className="container">
                 <div className="row">
@@ -76,10 +113,14 @@ class Contact extends React.Component {
                             <FormGroup row>
                                 <Label md={2} htmlFor="firstname">First Name</Label>
                                 <Col md={10}>
-                                    <Input type="text" name="firstname" placeholder="First Name"
+                                    <Input type="text" max={3} name="firstname" placeholder="First Name"
                                         value={this.state.firstname}
                                         onChange={this.handleInputChange}
+                                        invalid={errors.firstname !== ""}
+                                        valid={errors.firstname === "" && this.state.toched.firstname}
+                                        onBlur={this.handleBlur("firstname")}
                                         id="firstname" />
+                                    <FormFeedback>{errors.firstname}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -87,8 +128,12 @@ class Contact extends React.Component {
                                 <Col md={10}>
                                     <Input type="text" name="lastname" placeholder="Last Name"
                                         value={this.state.lastname}
+                                        onBlur={this.handleBlur("lastname")}
+                                        invalid={errors.lastname !== ""}
+                                        valid={errors.lastname === "" && this.state.toched.lastname}
                                         onChange={this.handleInputChange}
                                         id="lastname" />
+                                        <FormFeedback>{errors.lastname}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -96,8 +141,12 @@ class Contact extends React.Component {
                                 <Col md={10}>
                                     <Input type="tel" name="telnum" placeholder="Tel."
                                         value={this.state.telnum}
+                                        onBlur={this.handleBlur("telnum")}
+                                        invalid={errors.telnum !== ""}
+                                        valid={errors.telnum === "" && this.state.toched.telnum}
                                         onChange={this.handleInputChange}
                                         id="telnum" />
+                                        <FormFeedback>{errors.telnum}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -105,8 +154,12 @@ class Contact extends React.Component {
                                 <Col md={10}>
                                     <Input type="email" name="email" placeholder="Email"
                                         value={this.state.email}
+                                        invalid={errors.email !== ""}
+                                        onBlur={this.handleBlur("email")}
+                                        valid={errors.email === "" && this.state.toched.email}
                                         onChange={this.handleInputChange}
                                         id="email" />
+                                        <FormFeedback>{errors.email}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -149,4 +202,4 @@ class Contact extends React.Component {
 
 }
 
-export default Contact;
+export default Contact; 
