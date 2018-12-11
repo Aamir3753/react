@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CommentForm from './CommentFormComponent';
 import { Card, CardImg, CardBody, CardText, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 function DishDetail(props) {
     return (
@@ -33,6 +34,7 @@ function DishDetail(props) {
                             </ul>
                         )
                     })}
+                    <CommentForm />
                 </div>
             </div>
         </div>
