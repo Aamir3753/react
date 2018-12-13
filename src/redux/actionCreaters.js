@@ -1,5 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { DISHES } from '../Shared/dishes';
+import { LEADERS } from '../Shared/leaders';
 export const addComment = (dishId, author, rating, comment) => ({
     type: ActionTypes.ADD_COMMENT,
     payload: {
@@ -12,7 +13,7 @@ export const addComment = (dishId, author, rating, comment) => ({
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading());
     setTimeout(() => {
-       dispatch(addDishes(DISHES));
+        dispatch(addDishes(DISHES));
     }, 2000)
 }
 const dishesLoading = () => ({
