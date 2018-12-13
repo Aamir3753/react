@@ -12,26 +12,57 @@ export const addComment = (dishId, author, rating, comment) => ({
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading());
     return fetch(baseUrl + "dishes")
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                let err = new Error(`Error  ${response.status} : ${response.statusText}`);
+                throw err;
+            }
+        })
         .then(response => response.json())
         .then(dishes => dispatch(addDishes(dishes)))
-        .catch(err => console.log(err));
+        .catch(err => dispatch(dishesLoadingFaild(err.message)));
 }
 export const fetchPromos = () => (dispatch) => {
     dispatch(loadingPromos());
     fetch(baseUrl + "promotions")
+    .then(res => {
+        if (res.ok) {
+            return res;
+        }
+        else {
+            var err = new Error(`Error ${res.status} : ${res.statusText}`);
+            throw err;
+        }
+    })
+    .then(res => res.json())
+    .then(com => dispatch(addPromos(com)))
+    .catch(err => dispatch(faildPromos(err.message)));
+}
+export const fetchComments = () => (dispatch) => {
+    fetch(baseUrl + "comments")
+        .then(res => {
+            if (res.ok) {
+                return res;
+            }
+            else {
+                var err = new Error(`Error ${res.status} : ${res.statusText}`);
+                throw err;
+            }
+        })
         .then(res => res.json())
-        .then(promos => dispatch(addPromos(promos)))
-        .catch(err => console.log(err));
+        .then(com => dispatch(addComments(com)))
+        .catch(err => dispatch(fetchCommentsFaild(err.message)));
 }
-export const fetchComments = ()=>(dispatch)=>{
-    fetch(baseUrl+"comments")
-    .then(res=>res.json())
-    .then(com=>dispatch(addComments(com)))
-    .catch(err=>console.log(err));
-}
-const addComments = (com)=>({
-    type:ActionTypes.DISPLAY_COMMENTS,
-    payload:com
+const addComments = (com) => ({
+    type: ActionTypes.DISPLAY_COMMENTS,
+    payload: com
+});
+const fetchCommentsFaild = (errMess)=>({
+    type:ActionTypes.FAILD_COMMENTS,
+    payload:errMess
 })
 const dishesLoading = () => ({
     type: ActionTypes.LOADING_DISHES,

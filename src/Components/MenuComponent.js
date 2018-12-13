@@ -19,7 +19,7 @@ function Menu(props) {
             <div className="conatiner">
                 <div className="row">
                     <div className="col-12 ">
-                        <h4>{props.errMess}</h4>
+                        <h4 className="text-center">{props.errMess}</h4>
                     </div>
                 </div>
             </div>
