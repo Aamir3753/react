@@ -7,7 +7,6 @@ import Leaders from './leaders';
 import Promotions from './promotions';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger'
-import { formReducer } from 'react-redux-form';
 export const ConfigureStore = () => {
     return createStore(combineReducers({
         comments: Comments,
