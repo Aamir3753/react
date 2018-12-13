@@ -2,7 +2,8 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody, Button, Row, Label } from 'reactstrap';
 import { LocalForm, Control, Errors } from 'react-redux-form';
 import {connect} from 'react-redux';
-import {addComment} from '../redux/actionCreaters'
+import {postComment} from '../redux/actionCreaters'
+
 const minLength = (len) => (val) => val && val.length >= len;
 const maxLength = (len) => (val) => !val || val.length <= len;
 class CommentForm extends React.Component {
@@ -20,7 +21,7 @@ class CommentForm extends React.Component {
         })
     }
     submitHandle(values){
-        this.props.dispatch(addComment(this.props.dishId,values.name,values.rating,values.comment));
+        this.props.dispatch(postComment(this.props.dishId,values.name,values.rating,values.comment));
         this.toggleModal();
     }
     render() {

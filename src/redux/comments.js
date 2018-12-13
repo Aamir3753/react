@@ -7,8 +7,6 @@ const Comments = (state = {
     switch (action.type) {
         case ActionTypes.ADD_COMMENT:
             var comment = action.payload;
-            comment.id = state.length;
-            comment.date = new Date().toISOString();
             return { ...state, isLoading: false, errMess: null, comments: state.comments.concat(comment) }
         case ActionTypes.DISPLAY_COMMENTS:
             return { ...state, isLoading: false, comments: action.payload, errMess: null }

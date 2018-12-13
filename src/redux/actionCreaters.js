@@ -1,14 +1,38 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../Shared/baseUrls';
-export const addComment = (dishId, author, rating, comment) => ({
+export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
-    payload: {
-        dishId,
-        author,
-        rating,
-        comment
-    }
+    payload:comment
 });
+export const postComment = (dishId, author, rating, comment) =>(dispatch) => {
+    var newComment = {
+        dishId:dishId, 
+        author:author, 
+        rating:rating, 
+        comment:comment
+    };
+    newComment.date=new Date().toISOString();
+    fetch(baseUrl+"comments",{
+        method:"POST",
+        body:JSON.stringify(newComment),
+        headers:{
+            'Content-Type':'application/json'
+        },
+        credentials:'same-origin'
+    })
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }
+        else{
+            var err = new Error(`Error ${res.status} : ${res.statusText}`);
+            throw err
+        }
+    })
+    .then(res=>res.json())
+    .then(res=>dispatch(addComment(res)))
+    .catch(err=>console.log(err));
+}
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading());
     return fetch(baseUrl + "dishes")
@@ -28,18 +52,18 @@ export const fetchDishes = () => (dispatch) => {
 export const fetchPromos = () => (dispatch) => {
     dispatch(loadingPromos());
     fetch(baseUrl + "promotions")
-    .then(res => {
-        if (res.ok) {
-            return res;
-        }
-        else {
-            var err = new Error(`Error ${res.status} : ${res.statusText}`);
-            throw err;
-        }
-    })
-    .then(res => res.json())
-    .then(com => dispatch(addPromos(com)))
-    .catch(err => dispatch(faildPromos(err.message)));
+        .then(res => {
+            if (res.ok) {
+                return res;
+            }
+            else {
+                var err = new Error(`Error ${res.status} : ${res.statusText}`);
+                throw err;
+            }
+        })
+        .then(res => res.json())
+        .then(com => dispatch(addPromos(com)))
+        .catch(err => dispatch(faildPromos(err.message)));
 }
 export const fetchComments = () => (dispatch) => {
     fetch(baseUrl + "comments")
@@ -60,9 +84,9 @@ const addComments = (com) => ({
     type: ActionTypes.DISPLAY_COMMENTS,
     payload: com
 });
-const fetchCommentsFaild = (errMess)=>({
-    type:ActionTypes.FAILD_COMMENTS,
-    payload:errMess
+const fetchCommentsFaild = (errMess) => ({
+    type: ActionTypes.FAILD_COMMENTS,
+    payload: errMess
 })
 const dishesLoading = () => ({
     type: ActionTypes.LOADING_DISHES,
