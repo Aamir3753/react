@@ -5,6 +5,7 @@ import {
     , Button, Label
 } from 'reactstrap';
 import { Control, Errors, Form } from 'react-redux-form';
+import { postFeedback } from '../redux/actionCreaters';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -14,7 +15,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
 
 class Contact extends React.Component {
     handleSubmit = (values) => {
-        console.log(values);
+        postFeedback(values.firstname, values.lastname, values.telnum, values.email, values.agree, values.contactType, values.message);
         this.props.resetFeedbackForm();
     }
     render() {
@@ -134,14 +135,14 @@ class Contact extends React.Component {
                                             required,
                                             validEmail
                                         }} />
-                                        <Errors
+                                    <Errors
                                         className="text-danger"
                                         model=".email"
                                         show="touched"
                                         messages={{
-                                            validEmail:"Please enter valid email address"
+                                            validEmail: "Please enter valid email address"
                                         }}
-                                        ></Errors>
+                                    ></Errors>
                                 </Col>
                             </Row>
                             <Row className="form-group">

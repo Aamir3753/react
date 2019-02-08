@@ -8,7 +8,6 @@ import { baseUrl } from '../Shared/baseUrls';
 import { FadeTransform } from 'react-animation-components';
 
 function RenderCard(props) {
-
     if (props.isLoading) {
         return (
             <Loading />
@@ -16,7 +15,9 @@ function RenderCard(props) {
     }
     else if (props.errMess) {
         return (
-            <h4>{props.errMess}</h4>
+            <div>
+                <h4>{props.errMess}</h4>
+            </div>
         )
     }
     else {
@@ -38,7 +39,6 @@ function RenderCard(props) {
     }
 }
 function Home(props) {
-    console.log(props);
     return (
         <div className="container">
             <div className="row align-items-start">
@@ -49,7 +49,7 @@ function Home(props) {
                     <RenderCard item={props.promotion} isLoading={props.promosIsLoading} errMess={props.promosErrMess} />
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.leader} />
+                    <RenderCard item={props.leader} isLoading={props.leadersIsLoading} errMess={props.leadersErrMess} />
                 </div>
             </div>
         </div>

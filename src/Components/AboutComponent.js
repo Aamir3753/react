@@ -1,8 +1,11 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../Shared/baseUrls';
+import { Stagger, Fade } from 'react-animation-components';
 function About(props) {
-
+    console.log(props);
     return (
         <div className="container">
             <div className="row">
@@ -58,30 +61,46 @@ function About(props) {
                     <h2>Corporate Leadership</h2>
                 </div>
                 <div className="col-12">
-                    {props.leaders.map(
-                        leader => <RenderLeader key={leader.id} leader={leader} />
-                    )}
+                    <RenderHandler props={props} />
                 </div>
             </div>
         </div>
     );
 }
+let RenderHandler = ({ props }) => {
+    if (props.isLoading) {
+        return <Loading />
+    }
+    else if (props.errMess) {
+        return (
+            <div>
+                <h4 className="text-center">{props.errMess}</h4>
+                <img src="assets/buffet.png"  alt="buffet"/>
+            </div>
+        )
+    }
+    else {
+        return (
+            <Stagger in>
+                {props.leaders.map(leader => (<Fade in key={leader.id}><RenderLeader leader={leader} /></Fade>))}
+            </Stagger>
+        )
+    }
+}
 let RenderLeader = (props) => {
     return (
-        <React.Fragment>
-            <Media>
-                <Media left  className="mr-4">
-                    <Media object src={props.leader.image} alt={props.leader.name} />
-                </Media>
-                <Media body>
-                    <Media heading>
-                        {props.leader.name}
-                    </Media>
-                    <h6>{props.leader.designation}</h6>
-                    <p>{props.leader.description}</p>
-                </Media>
+        <Media>
+            <Media left className="mr-4">
+                <Media object src={baseUrl + props.leader.image} alt={props.leader.name} />
             </Media>
-        </React.Fragment>
+            <Media body>
+                <Media heading>
+                    {props.leader.name}
+                </Media>
+                <h6>{props.leader.designation}</h6>
+                <p>{props.leader.description}</p>
+            </Media>
+        </Media>
     )
 }
 
